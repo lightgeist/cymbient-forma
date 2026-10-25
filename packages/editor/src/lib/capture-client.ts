@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { sizeCaptureRootToVisibleNodes } from './capture-bounds'
 import { apiUrl } from '@sheet/platform'
 import { domToBlob } from 'modern-screenshot'
 import {
@@ -149,6 +150,9 @@ async function render(request: CaptureRequest) {
     if (!target) {
       throw new Error(request.rootId === null ? 'The design rendered nothing.' : `Web node "${request.rootId}" did not render`)
     }
+    // Absolute-positioned frames do not contribute to the wrapper's intrinsic height.
+    // The off-screen wrapper needs real bounds for PNG/JPG capture.
+    if (request.rootId === null && root) sizeCaptureRootToVisibleNodes(root)
     const bounds = target.getBoundingClientRect()
     if (bounds.width < 1 || bounds.height < 1) throw new Error('Web screenshot target has no visible bounds')
 
