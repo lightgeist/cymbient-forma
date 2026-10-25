@@ -25,6 +25,7 @@ RUN bun install --frozen-lockfile
 
 # Build the real React/Vite editor in browser mode, independently of Tauri.
 FROM deps AS web-build
+COPY tsconfig.json ./
 COPY apps/desktop ./apps/desktop
 COPY packages ./packages
 ENV VITE_FORMA_WEB=true
