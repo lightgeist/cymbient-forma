@@ -1,0 +1,34 @@
+{
+  "created": true,
+  "reloaded": true,
+  "reopenedFromDashboard": true,
+  "secondBrowser": true,
+  "frameAdded": false,
+  "errors": [],
+  "designUrl": "https://forma.aifpd.com/design/d82384d8bf5564c4d9972ee48659ed8ed",
+  "steps": [
+    {
+      "httpStatus": 200
+    },
+    {
+      "step": "prod-dashboard-new",
+      "url": "https://forma.aifpd.com/app/new",
+      "text": "Dashboard\nCYMBIENT FORMA\n\nWORKSPACE\n\nRecents\nFiles\nNew file\nSettings\nSource code · AGPL-3.0\nC\nCymbient Team\nNew file\n⌘N\nBrowse all files\n⌘F\nNo files yet"
+    },
+    {
+      "step": "prod-created",
+      "url": "https://forma.aifpd.com/design/d82384d8bf5564c4d9972ee48659ed8ed",
+      "text": "Dashboard\nUntitled\nCopy\nExport\nCYMBIENT FORMA\n\nWORKSPACE\n\nRecents\nFiles\nNew file\nSettings\nSource code · AGPL-3.0\nC\nCymbient Team\nUntitled\nPAGES\nPage 1\nLAYERS\n\nThis page is empty.\n\nAdd a frame\nComponents\n\nSelect an element to create a component.\n\nFonts\n\nNo fonts set yet. Pick one in Typography.\n\nDESIGN\nDelete selected element\nPAGE\n272727\nMCP\nConnect your agent"
+    },
+    {
+      "step": "prod-reloaded",
+      "url": "https://forma.aifpd.com/design/d82384d8bf5564c4d9972ee48659ed8ed",
+      "text": "Dashboard\nUntitled\nCopy\nExport\nCYMBIENT FORMA\n\nWORKSPACE\n\nRecents\nFiles\nNew file\nSettings\nSource code · AGPL-3.0\nC\nCymbient Team\nUntitled\nPAGES\nPage 1\nLAYERS\n\nThis page is empty.\n\nAdd a frame\nComponents\n\nSelect an element to create a component.\n\nFonts\n\nNo fonts set yet. Pick one in Typography.\n\nDESIGN\nDelete selected element\nPAGE\n272727\nMCP\nConnect your agent"
+    },
+    {
+      "step": "prod-list",
+      "url": "https://forma.aifpd.com/app",
+      "text": "Dashboard\nUntitled\nCYMBIENT FORMA\n\nWORKSPACE\n\nRecents\nFiles\nNew file\nSettings\nSource code · AGPL-3.0\nC\nCymbient Team\nRECENTS\n\n1 FILE\n\nLIGHT\nDARK\n\nEDITED JUST NOW\n\nUntitled\nEmpty design"
+    }
+  ]
+}

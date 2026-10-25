@@ -1,33 +1,59 @@
-# Cymbient Forma — team pilot
+# Cymbient Forma — production pilot v0.1
 
-Adapted from [Sheet](https://github.com/DeepanshuMishraa/sheet) under AGPL-3.0-or-later. This is a working browser design editor, not yet feature-equivalent to Figma.
+Deployed 2026-10-26, based on [DeepanshuMishraa/sheet](https://github.com/DeepanshuMishraa/sheet) (AGPL-3.0-or-later). Corresponding public source: https://github.com/lightgeist/cymbient-forma
 
-## Architecture
+## Live architecture
 
 ```text
-Cloudflare DNS/TLS -> Cloudflare Tunnel -> rack loopback :4184
-  -> Bun server (React/Vite web editor + oRPC/MCP + SSE)
-    -> persistent Docker SQLite volume
+Team browser -> Cloudflare DNS + HTTPS (forma.aifpd.com)
+  -> Cloudflare Tunnel (systemd --user, rack)
+    -> http://127.0.0.1:4184
+      -> Bun 1.4 hosted web SPA + typed API + SSE + protected MCP
+        -> SQLite /srv/atlas/cymbient-forma-release/data/forma.db
 ```
 
-## Production deploy
+The Mac is the authoring/deployment workstation. The rack hosts the app and database. We deliberately use Bun as a user service instead of a Docker image: two Docker builds stalled due severe host I/O pressure at final image assembly, while the native Bun build passed.
 
-- Run from /srv/atlas/cymbient-forma on the rack.
-- Create the ignored file `deploy/secrets/forma.env` with strong, separate `FORMA_TEAM_PASSWORD` (20+ characters) and `FORMA_MCP_TOKEN` (32+ characters). File mode 600.
-- `docker compose -f deploy/docker-compose.yml up -d --build`
-- Check unauthenticated /app 401; authenticated /app 200; unauthenticated /mcp 404; /ready 200.
-- Tunnel credentials/configuration are kept outside Git and the Cloudflare Tunnel uses forma.aifpd.com.
-- Connect users through HTTPS only. Basic username is `team`. Password is the rack secret; avoid publishing credentials.
+## Where it runs
 
-## Safety and limitations
+- Rack source: /srv/atlas/cymbient-forma-release (GitHub branch main).
+- Bun executable: /home/agent/.local/bin/bun (v1.4.0).
+- Editor systemd user service: cymbient-forma.service.
+- Tunnel systemd user service: cymbient-forma-tunnel.service.
+- Frontend bundle: apps/desktop/dist/app.
+- Persisted designs: data/forma.db (+ WAL/SHM).
+- Credentials: deploy/secrets/forma.env on the rack only, ignored from Git; mode 0600.
+- Cloudflare tunnel credential: /srv/atlas/cymbient-forma/deploy/secrets/tunnel.json, kept outside Git.
+- Public URL: https://forma.aifpd.com
 
-The team credential is a coarse perimeter. **There are no individual accounts, SSO, per-file ACLs, organizational workspaces, or named real-time cursors.** Every authorized user currently edits the single upstream `local` database. Do not invite external clients or store sensitive client designs until identity and permissions are implemented and verified. MCP requires a separate bearer token, and host-specific agent install routes are blocked.
+## Operations
 
-The app can create/edit structured web-native designs with history, drafts, exports, and agents. It is not currently a full substitute for Figma's multiplayer, shared component libraries, plugins, Figma import, vector/pen tooling, approvals, teams and dev handoff. Decide replacement only after real team workflows pass.
+```sh
+cd /srv/atlas/cymbient-forma-release
+git pull --ff-only
+/home/agent/.local/bin/bun install --frozen-lockfile
+VITE_FORMA_WEB=true /home/agent/.local/bin/bun run --cwd apps/desktop build:app
+XDG_RUNTIME_DIR=/run/user/1005 systemctl --user restart cymbient-forma.service
+XDG_RUNTIME_DIR=/run/user/1005 systemctl --user status cymbient-forma.service
+journalctl --user -u cymbient-forma.service -n 100 --no-pager
+curl https://forma.aifpd.com/ready
+```
 
-## Operation and backup
+For a consistent SQLite backup without stopping the app, Python sqlite3.backup() can create a database snapshot from data/forma.db. Verify restoration by reopening a saved file.
 
-- `docker compose -f deploy/docker-compose.yml logs --tail 100 forma`
-- SQLite persists in Docker volume `cymbient-forma_forma-data`.
-- Back up with SQLite online backup or stop container before copying the db and WAL. Reopen a created design after container restart to verify recovery.
-- Source access in app sidebar points to https://github.com/lightgeist/cymbient-forma. Keep public repository current for AGPL compliance.
+## Authentication and team rollout
+
+- Unauthenticated /app returns HTTP 401, while /mcp returns HTTP 404 without an independent Bearer token. /ready is open for health checks.
+- Basic Auth username: team. Password is in the rack-only ignored secrets file. Share via a password manager; do not post it in a public repository.
+- The current shared gateway is only a limited internal pilot; it is NOT SSO or individual authorization. All authenticated designers use the upstream single local workspace. There are no file-level ACLs, organization identities, or reliable concurrent co-editing semantics.
+- Avoid confidential client projects until SSO, membership checks, tenant isolation, and audit trail are complete.
+
+## Evidence
+
+Tested end to end through Chrome against public HTTPS: login, dashboard, create file, reload persisted file, reopen, and second browser. No JS errors reported in this journey. Rack user service restart + SQLite row count confirmed persistence. Public /ready=200 and unauthenticated /app=401 after restart.
+
+See docs/evidence/prod-*.png, docs/evidence/prod-e2e-result.json and recorded .webm screen captures for the tested flows. Note that design editing operations (frame/text insertion) and export workflows remain to be separately validated before wider rollout.
+
+## Figma replacement gap
+
+Not yet at parity: individual accounts/SSO, organizations, team projects, robust real-time co-editing and presence, shared component systems, comments/review/approvals, plugins, vector editing, Figma import, design-to-dev handoff, scalable asset storage, permissions and audit.

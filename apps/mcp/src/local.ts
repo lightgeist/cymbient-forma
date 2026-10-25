@@ -342,6 +342,7 @@ const hostedOptions = { password: process.env.FORMA_TEAM_PASSWORD, publicOrigin:
 await ensureLocalUser()
 
 const server = Bun.serve({
+  hostname: process.env.FORMA_BIND_LOCAL === '1' ? '127.0.0.1' : undefined,
   port: config.port,
   fetch: (request, server) => {
     // Bun closes connections idle for 10s; a quiet event stream is idle by design.
