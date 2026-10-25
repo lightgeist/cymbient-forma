@@ -1,0 +1,46 @@
+{
+  "name": "@sheet/canvas",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./web-model": "./src/web-model.ts",
+    "./legacy-migration": "./src/legacy-migration.ts",
+    "./web-css": "./src/web-css.ts",
+    "./web-import": "./src/web-import.ts",
+    "./web-components": "./src/web-components.ts",
+    "./web-diff": "./src/web-diff.ts",
+    "./web-merge": "./src/web-merge.ts",
+    "./web-export": "./src/web-export.ts",
+    "./web-test-browser": "./src/web-test-browser.ts",
+    "./web-react": "./src/web-react.tsx",
+    "./legacy-model": "./src/legacy-model.ts",
+    "./web-icons": "./src/web-icons.ts",
+    "./web-icon-style": "./src/web-icon-style.ts",
+    "./web-shaders": "./src/web-shaders.ts",
+    "./web-pages": "./src/web-pages.ts",
+    "./web-frames": "./src/web-frames.ts"
+  },
+  "scripts": {
+    "embed-preflight": "bun run scripts/embed-tailwind-preflight.ts"
+  },
+  "peerDependencies": {
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@testing-library/react": "^16.3.2",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@hugeicons/core-free-icons": "^4.3.5",
+    "@paper-design/shaders": "^0.0.81",
+    "lucide": "^1.48.0",
+    "tailwindcss": "4.3.3"
+  }
+}

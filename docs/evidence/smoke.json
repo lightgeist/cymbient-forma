@@ -1,0 +1,11 @@
+{
+  "url": "http://127.0.0.1:4184/app/new",
+  "log": [
+    "forma-onboarding:Dashboard | FORMA |  | WORKSPACE |  | Recents | Files | New file | Settings | Source code · AGPL-3.0 | C | Cymbient Team | RECENTS |  | 0 FILES |  | LIGHT | DARK |  | NO DESIGN FILES YET |  | Start a file and open it on the canvas. |  | New file | Welcome | Look | Sound | Agents | sheet. |  | An infinite canvas of real, structured UI. Bring your own agent over MCP and it edits the same document you do. |  | Continue",
+    "forma-dashboard:Dashboard | FORMA |  | WORKSPACE |  | Recents | Files | New file | Settings | Source code · AGPL-3.0 | C | Cymbient Team | RECENTS |  | 0 FILES |  | LIGHT | DARK |  | NO DESIGN FILES YET |  | Start a file and open it on the canvas. |  | New file",
+    "BUTTONS: | Settings |  |  |  | New file",
+    "LINKS:Dashboard |  | Recents | Files | New file | Source code · AGPL-3.0",
+    "forma-new-file:Dashboard | FORMA |  | WORKSPACE |  | Recents | Files | New file | Settings | Source code · AGPL-3.0 | C | Cymbient Team | New file | ⌘N | Browse all files | ⌘F | No files yet"
+  ],
+  "errors": []
+}

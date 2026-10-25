@@ -1,0 +1,830 @@
+@import './tokens.css';
+
+/* Sheet's design tokens, variants, and shared utilities.
+   The desktop app bundles this into the Tauri window. It keeps its own entry
+   stylesheet for the parts that are its own — the Tailwind import, its fonts,
+   and its sources.
+
+   Tailwind resolves `@source` against the file it appears in, so the paths
+   below reach the packages that ship classes from here rather than from an
+   app. */
+@source './';
+@source '../../editor/src';
+@source '../../shell/src';
+
+@custom-variant dark (&:is(.dark *));
+
+
+
+@theme inline {
+  /* Everything sizes in rem so the Appearance scale (root font size) moves the
+     whole interface — radii included. Avoid px type literals in app chrome. */
+  /* The kit's scale: 12/16 caption, 14/20 body, 16/20 card heading,
+     20/32 section, 36/44 page title. `sm` keeps a 13px step between caption
+     and body, which the dense editor chrome leans on. */
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: calc(0.875 / 0.625);
+  /* Paper Mono sets wide, so every step sits a notch under its sans
+     counterpart: the same measure, the same density, a quieter page. */
+  --text-xs: 0.6875rem;
+  --text-xs--line-height: calc(1 / 0.6875);
+  --text-sm: 0.75rem;
+  --text-sm--line-height: calc(1.125 / 0.75);
+  --text-base: 0.8125rem;
+  --text-base--line-height: calc(1.25 / 0.8125);
+  --text-lg: 0.9375rem;
+  --text-lg--line-height: calc(1.375 / 0.9375);
+  --text-xl: 1.25rem;
+  --text-xl--line-height: calc(2 / 1.25);
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: calc(2 / 1.5);
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: calc(2.75 / 2.25);
+  /* One face. `sans`, `heading`, and `mono` all resolve to Paper Mono. */
+  --font-sans: var(--sheet-font-sans);
+  --font-heading: var(--sheet-font-sans);
+  --font-mono: var(--sheet-font-mono);
+  /* The kit's search / shell easing, measured off the page CSS. */
+  --ease-kit: cubic-bezier(0.19, 1, 0.22, 1);
+  /* The durations, exposed as utilities so a panel entrance and a hover are
+     drawn from one scale instead of each inventing a number. The values live in
+     `:root` above and are mapped here under the namespace Tailwind reads, so a
+     hand-written rule and a `duration-*` class can never disagree. */
+  --transition-duration-fast: var(--duration-fast);
+  --transition-duration-base: var(--duration-base);
+  --transition-duration-slow: var(--duration-slow);
+  --color-cx-canvas: var(--cx-canvas);
+  --color-cx-dot: var(--cx-dot);
+  --color-cx-accent: var(--cx-accent);
+  /* The fourth canvas token. Without it `bg-cx-ink/10` — the only way to draw a
+     faint block that still tracks the theme's ink — compiles to nothing, and
+     the illustration in the welcome dialog renders as an empty grid. */
+  --color-cx-ink: var(--cx-ink);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  /* No rounding. Every corner in the chrome is square, so the whole scale is
+     zero and `rounded-*` utilities keep working without drawing a curve. */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --animate-skeleton: skeleton 2s -1s infinite linear;
+  --animate-caret-blink: 1s ease-out infinite caret-blink;
+  --animate-toast-success-odd: toast-success-odd 0.32s cubic-bezier(0.5, 1, 0.89, 1);
+  --animate-toast-success-even: toast-success-even 0.32s cubic-bezier(0.5, 1, 0.89, 1);
+  --animate-toast-error-odd: toast-error-odd 0.28s cubic-bezier(0.5, 1, 0.89, 1);
+  --animate-toast-error-even: toast-error-even 0.28s cubic-bezier(0.5, 1, 0.89, 1);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning: var(--warning);
+  --color-success-foreground: var(--success-foreground);
+  --color-success: var(--success);
+  --color-diff-added: var(--diff-added);
+  --color-diff-removed: var(--diff-removed);
+  --color-skill: var(--skill);
+  --color-info-foreground: var(--info-foreground);
+  --color-info: var(--info);
+  --color-frame: var(--frame);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-tooltip: var(--tooltip);
+  --color-tooltip-foreground: var(--tooltip-foreground);
+  --color-well: var(--well);
+  /* The same lift as `-lg` without the hairline, for chrome that is not a
+     panel — the inverted tooltip would otherwise draw a `--line` edge. */
+  --shadow-float: var(--panel-shadow-lg);
+  /* Hairline plus lift, as one utility. Themed through `--panel-shadow`, so no
+     `.dark` override. `-lg` is for detached chrome: floating bars, popovers. */
+  --shadow-panel: var(--panel-shadow);
+  --shadow-panel-lg: var(--panel-shadow-lg);
+  --shadow-lift: var(--lift);
+  --shadow-lift-hover: var(--lift-hover);
+  --shadow-lift-selected: var(--lift-selected);
+  --shadow-hairline: 0 0 0 1px var(--edge);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-elevated: var(--shadow-elevated);
+  --shadow-elevated-hover: var(--shadow-elevated-hover);
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+  @keyframes skeleton {
+  to {
+    background-position: -200% 0;
+    }
+  }
+  @keyframes caret-blink {
+  0%, 70%, to {
+    opacity: 1;
+    }
+  20%, 50% {
+    opacity: 0;
+    }
+  }
+  @keyframes toast-success-odd {
+  0% {
+    scale: 1;
+    }
+  30% {
+    scale: 1.025;
+    }
+  60% {
+    scale: 0.99;
+    }
+  100% {
+    scale: 1;
+    }
+  }
+  @keyframes toast-error-odd {
+  0% {
+    translate: 0 0;
+    }
+  25% {
+    translate: -3px 0;
+    }
+  50% {
+    translate: 3px 0;
+    }
+  75% {
+    translate: -3px 0;
+    }
+  100% {
+    translate: 0 0;
+    }
+  }
+  @keyframes toast-success-even {
+  0% {
+    scale: 1;
+    }
+  30% {
+    scale: 1.025;
+    }
+  60% {
+    scale: 0.99;
+    }
+  100% {
+    scale: 1;
+    }
+  }
+  @keyframes toast-error-even {
+  0% {
+    translate: 0 0;
+    }
+  25% {
+    translate: -3px 0;
+    }
+  50% {
+    translate: 3px 0;
+    }
+  75% {
+    translate: -3px 0;
+    }
+  100% {
+    translate: 0 0;
+    }
+  }
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+/* Text rendering, once, for the whole window. Dense 12–14px chrome only reads
+   as set type when the rasterizer is not inventing strokes and kerning pairs:
+   grayscale smoothing plus `optimizeLegibility` is the difference between
+   "letters" and "pixels", and neither pays off if it is opt-in per surface.
+
+   It sits on `html` rather than `body` so the two things a `body` rule misses
+   get it too — anything portalled in (menus, dialogs, toasts) and the nodes
+   the canvas renderer mounts inside the document. Paper Mono is the one face
+   in the chrome; setting it here lets every portal inherit it. */
+html {
+  font-family: var(--sheet-font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures contextual;
+  /* A window is a desktop app, not a web page: the grey flash on a click and
+     the blue text-callout box on a drag are both web affordances. */
+  -webkit-tap-highlight-color: transparent;
+  /* Native form controls, scrollbars, and carets take their colour from the
+     theme rather than the OS accent, so a purple accent stays the only chroma
+     on screen. */
+  accent-color: var(--cx-accent);
+  caret-color: var(--cx-accent);
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.cx-shimmer {
+  display: inline-block;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-muted-foreground) 0%,
+    var(--color-muted-foreground) 35%,
+    var(--color-foreground) 50%,
+    var(--color-muted-foreground) 65%,
+    var(--color-muted-foreground) 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: cx-shimmer 1.6s linear infinite;
+}
+
+@keyframes cx-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* The agent chat box, and the one place in the app that is translucent.
+   Everything else is opaque on purpose (see "Chrome materials" above); this
+   floats over the canvas while the agent edits it, and letting the work show
+   through is the point of it. Kept here rather than as utilities at the call
+   site so the exception stays one rule somebody can find and delete. */
+.cx-agent-box {
+  position: relative;
+  background: --alpha(var(--surface) / 72%);
+  border: 1px solid --alpha(var(--line) / 90%);
+  box-shadow:
+    inset 0 1px 0 --alpha(var(--color-white) / 6%),
+    var(--panel-shadow-lg),
+    0 24px 48px -16px --alpha(var(--color-black) / 35%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+}
+
+/* A hairline of light along the top edge that only moves while the agent is
+   working — the box's whole pulse, one pixel tall. */
+.cx-agent-box::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: -1px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 15%,
+    --alpha(var(--foreground) / 60%) 50%,
+    transparent 85%
+  );
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.cx-agent-box[data-running='true']::before {
+  opacity: 1;
+  animation: cx-agent-scan 2.2s linear infinite;
+}
+
+@keyframes cx-agent-scan {
+  from {
+    background-position: 160% 0;
+  }
+  to {
+    background-position: -60% 0;
+  }
+}
+
+/* Thinking and tool-call lines use `cx-shimmer`, the same sweep the page
+   itself loads with — one shimmer in the product, not two. */
+
+/* No backdrop-filter (Firefox by default, older engines): fall back to an
+   opaque panel rather than an unreadable one. */
+@supports not (backdrop-filter: blur(1px)) {
+  .cx-agent-box {
+    background: var(--surface);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cx-agent-box[data-running='true']::before {
+    animation: none;
+    background-position: 50% 0;
+  }
+}
+
+/* An external agent working in this document. The badge borrows the inverted
+   tooltip material so it reads as chrome and never as part of the design. */
+.cx-agent-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+  max-width: 16rem;
+  padding-inline: 6px 8px;
+  border-radius: 0;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: var(--panel-shadow);
+  opacity: 0;
+  transition:
+    opacity 140ms ease,
+    transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.cx-agent-badge[data-visible='true'] {
+  opacity: 1;
+}
+
+.cx-agent-badge[data-visible='true'][data-phase='settled'] {
+  opacity: 0.6;
+}
+
+.cx-agent-typing {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.cx-agent-typing i {
+  width: 3px;
+  height: 3px;
+  border-radius: 0;
+  background: currentColor;
+  animation: cx-agent-typing 1s ease-in-out infinite;
+}
+
+.cx-agent-typing i:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.cx-agent-typing i:nth-child(3) {
+  animation-delay: 300ms;
+}
+
+.cx-agent-badge[data-phase='settled'] .cx-agent-typing {
+  display: none;
+}
+
+.cx-agent-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 0;
+  background: --alpha(var(--foreground) / 4%);
+  outline: 1px solid --alpha(var(--foreground) / 45%);
+  box-shadow: 0 0 0 4px --alpha(var(--foreground) / 5%);
+  transition:
+    width 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 150ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: width, height, transform;
+}
+
+.cx-agent-ring[data-phase='working'] {
+  animation: cx-agent-breathe 1.8s ease-in-out infinite;
+}
+
+.cx-agent-ring[data-phase='settled'] {
+  opacity: 0.5;
+}
+
+/* One outward pulse per beat while a tool call is in flight. */
+.cx-agent-avatar[data-phase='working']::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 0;
+  border: 1px solid --alpha(var(--foreground) / 35%);
+  animation: cx-agent-halo 1.8s ease-out infinite;
+}
+
+@keyframes cx-agent-typing {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes cx-agent-breathe {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes cx-agent-halo {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  70%,
+  100% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cx-shimmer {
+    animation: none;
+    background-image: none;
+    background-clip: unset;
+    -webkit-background-clip: unset;
+    color: var(--color-muted-foreground);
+    -webkit-text-fill-color: var(--color-muted-foreground);
+  }
+
+  .cx-agent-badge,
+  .cx-agent-ring {
+    transition: none;
+    animation: none;
+  }
+
+  .cx-agent-typing i,
+  .cx-agent-avatar[data-phase='working']::after {
+    animation: none;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--sheet-font-sans);
+  }
+
+  /* Focus, defined once for every control that has not asked for its own ring.
+     `:where` holds this at zero specificity, and `base` sits under `utilities`,
+     so a component's own `focus-visible:*` still wins — this is the floor that
+     makes focus visible everywhere, never a replacement. The offset keeps the
+     ring off the control's own hairline, where it would read as a border. */
+  :where(a, button, input, select, textarea, summary, [role='button']):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Form controls do not inherit the face by default. */
+  :where(button, input, select, textarea) {
+    font-family: inherit;
+  }
+
+  /* Selection is the one place text inverts against a fill, and the OS default
+     (a hard blue) is the loudest thing on a neutral screen. Tinting it with the
+     accent keeps the hue count at one. */
+  ::selection {
+    background: --alpha(var(--cx-accent) / 26%);
+  }
+
+  /* Native scrollbars follow the theme. They are chrome, so they get the same
+     hairline discipline as everything else: a thumb that only appears against
+     the surface it moves over, and a track that is not a surface. Firefox takes
+     the pair directly; WebKit needs the pseudo-elements. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: --alpha(var(--foreground) / 20%) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    /* The border is the trick: it eats 3px of the 10px track, so the thumb
+       reads as a 4px pill that keeps its radius at every length. */
+    border: 3px solid transparent;
+    border-radius: 0;
+    background: --alpha(var(--foreground) / 18%);
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: --alpha(var(--foreground) / 32%);
+    background-clip: content-box;
+  }
+}
+
+/* These live in `utilities` on purpose. Unlayered rules beat every layered one
+   regardless of specificity, so a bare `.bg-surface` out here would silently
+   win over `hover:bg-surface-2` and the hover state would never paint. */
+@layer utilities {
+  /* The two radii the token scale cannot reach: `rounded-full` is a literal
+     pill, `rounded` a literal 0.25rem. Squared here, with a root prefix so the
+     override wins regardless of utility order. Canvas content is unaffected;
+     designs carry their own radii in authored CSS, not in these classes. */
+  :root .rounded-full,
+  :root .rounded {
+    border-radius: 0;
+  }
+
+  .bg-surface {
+    background-color: var(--surface);
+  }
+
+  /* App-chrome typefaces follow the Appearance pick, not the compiled theme.
+     These sit in `utilities` (after Tailwind's own) so they win over the
+     inlined `font-sans` / `font-mono` utilities at equal specificity. */
+  .font-sans {
+    font-family: var(--sheet-font-sans);
+  }
+
+  .font-mono {
+    font-family: var(--sheet-font-mono);
+  }
+
+  .bg-surface-2 {
+    background-color: var(--surface-2);
+  }
+
+  .bg-line {
+    background-color: var(--line);
+  }
+
+  .border-line {
+    border-color: var(--line);
+  }
+
+  /* A strip of icons or chips that scrolls sideways but has no scrollbar of its
+     own — the affordance is the overflow itself. Needed in both engines: the
+     WebKit bar is `display: none`-able, `scrollbar-width` is the Firefox half. */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* A hairline that sits on top of a fill rather than inside it. Used where a
+     border would change the box's metrics — an overlay over the canvas, a
+     floating bar's top edge, a full-bleed header. */
+  .ring-hairline {
+    box-shadow: inset 0 1px 0 var(--line);
+  }
+}
+
+/* `/app` keeps its chrome mounted while route content changes. The entrance
+   rises a few pixels out of a slight blur, which reads as the page settling
+   into place rather than swapping. */
+.app-page-enter {
+  animation: app-page-enter 260ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes app-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Staggered arrival for lists and grids: set `--i` on each child and add the
+   class to the parent. A step is 28ms, capped so a long list never lags. */
+.cx-stagger > * {
+  animation: app-page-enter 320ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+  animation-delay: calc(min(var(--i, 0), 12) * 28ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-page-enter {
+    animation: none;
+  }
+}
+
+
+
+/* Reduced motion, as a floor rather than a list. Every component above opts out
+   where its motion carries meaning (the agent scan, the typing dots), but an
+   opt-out nobody remembers to add is a person's vestibular trigger. This is
+   unlayered and last, so it reaches the components that never thought about
+   it. Durations collapse to a single frame; end states still resolve, so
+   anything waiting on `transitionend` or `animationend` still runs. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* The loader: cells breathe between a faint and a full tone along a diagonal;
+   letters take the foreground colour one after another. */
+.cx-loader-cell {
+  opacity: 0.2;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: cx-loader-cell 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.cx-loader-letter {
+  color: var(--muted-foreground);
+  animation: cx-loader-letter 1.3s ease-in-out infinite;
+}
+
+@keyframes cx-loader-cell {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scaleY(0.55);
+    fill: currentColor;
+  }
+  35% {
+    opacity: 1;
+    transform: scaleY(1);
+    fill: var(--cx-accent);
+  }
+}
+
+/* The micro-label: the small, wide-set caps every row and section leads with.
+   One class so "label" means the same size, tracking and tone everywhere. */
+.cx-label {
+  font-size: 0.625rem;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* Square brackets around a label, drawn by CSS so the text itself stays plain
+   for search, tests and screen readers. */
+.cx-bracket::before {
+  content: '[\00a0';
+}
+
+.cx-bracket::after {
+  content: '\00a0]';
+}
+
+/* A dashed frame, like the registration marks on a printed sheet. */
+.cx-dashed {
+  border: 1px dashed var(--line);
+}
+
+/* Stroke-draw for SVG paths drawn with `pathLength="1"`. The path writes
+   itself in once; `--cx-draw-delay` staggers a group of them. */
+.cx-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: cx-draw 520ms cubic-bezier(0.23, 1, 0.32, 1) var(--cx-draw-delay, 0ms) forwards;
+}
+
+@keyframes cx-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The brand mark: the front square settles in on mount, lifts away on hover. */
+.cx-brand-front {
+  transform-box: fill-box;
+  animation: cx-brand-in 420ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+  transition: transform 240ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes cx-brand-in {
+  from {
+    transform: translate(6px, 6px);
+    opacity: 0;
+  }
+}
+
+:where(.group\/brand):hover .cx-brand-front,
+.cx-brand:hover .cx-brand-front {
+  transform: translate(-2px, -2px);
+}
+
+/* An orange mark that breathes once per second: "live", "working", "here". */
+.cx-live {
+  animation: cx-live 1.6s ease-in-out infinite;
+}
+
+@keyframes cx-live {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* Press feedback for anything round or icon-only. Fast in, a touch slower out,
+   so the release feels like it lets go rather than snaps. */
+.cx-press {
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cx-press:active {
+  transform: scale(0.94);
+  transition-duration: 80ms;
+}
+
+/* The row hover: a hairline of accent grows from the left edge. */
+.cx-row {
+  position: relative;
+}
+
+.cx-row::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 1px;
+  background: var(--cx-accent);
+  transform: scaleY(0);
+  transform-origin: 50% 50%;
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cx-row:hover::before,
+.cx-row:focus-within::before {
+  transform: scaleY(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cx-draw {
+    stroke-dashoffset: 0;
+  }
+  .cx-live {
+    animation: none;
+  }
+}
+
+@keyframes cx-loader-letter {
+  0%,
+  60%,
+  100% {
+    color: var(--muted-foreground);
+  }
+  25% {
+    color: var(--foreground);
+  }
+}

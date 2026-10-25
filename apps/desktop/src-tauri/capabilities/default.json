@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Core capability for the Sheet desktop window",
+  "windows": ["main", "settings"],
+  "permissions": ["core:default"]
+}

@@ -1,0 +1,24 @@
+name: cymbient-forma
+services:
+  forma:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    env_file:
+      - ./secrets/forma.env
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      SHEET_MCP_PORT: "4100"
+      SHEET_SQLITE_PATH: /data/forma.db
+      FORMA_WEB_DIR: /app/apps/desktop/dist/app
+      FORMA_PUBLIC_ORIGIN: https://forma.aifpd.com
+      MCP_PUBLIC_URL: https://forma.aifpd.com/mcp
+    ports:
+      - "127.0.0.1:4184:4100"
+    volumes:
+      - forma-data:/data
+    restart: unless-stopped
+    mem_limit: 2g
+volumes:
+  forma-data:

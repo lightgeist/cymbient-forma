@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Cymbient Forma — Design Workspace</title>
+    <link rel="icon" type="image/svg+xml" href="/forma-mark.svg" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#212121" />
+    <!-- Self-hosted, and byte-identical to what the web app loads. -->
+    <link rel="stylesheet" href="/vendor/fonts.css" />
+    <style>
+      /* Boot splash: shown while the bundle parses and React mounts, so the
+         window never sits blank. Pure CSS — no JS dependency. React removes
+         `#boot-splash` once it has painted (see `routes/__root.tsx`). */
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: #fafaf9;
+        color: #0d0d0d;
+        z-index: 50;
+      }
+      html.dark #boot-splash {
+        background: #212121;
+        color: #ececea;
+      }
+      .boot-loader {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font: 10px 'Paper Mono', ui-monospace, monospace;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0.8;
+      }
+      /* Nine ruler ticks that rise in a wave: the same mark as the in-app loader. */
+      .boot-ticks {
+        display: flex;
+        align-items: flex-end;
+        gap: 2.5px;
+        height: 14px;
+      }
+      .boot-ticks i {
+        width: 1.5px;
+        height: 9px;
+        border-radius: 1px;
+        background: currentColor;
+        opacity: 0.2;
+        transform-origin: 50% 100%;
+        animation: boot-tick 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+      .boot-ticks i:nth-child(4n + 1) { height: 14px; }
+      .boot-ticks i:nth-child(2) { animation-delay: 0.09s; }
+      .boot-ticks i:nth-child(3) { animation-delay: 0.18s; }
+      .boot-ticks i:nth-child(4) { animation-delay: 0.27s; }
+      .boot-ticks i:nth-child(5) { animation-delay: 0.36s; }
+      .boot-ticks i:nth-child(6) { animation-delay: 0.45s; }
+      .boot-ticks i:nth-child(7) { animation-delay: 0.54s; }
+      .boot-ticks i:nth-child(8) { animation-delay: 0.63s; }
+      .boot-ticks i:nth-child(9) { animation-delay: 0.72s; }
+      @keyframes boot-tick {
+        0%, 100% { opacity: 0.2; transform: scaleY(0.55); background: currentColor; }
+        35% { opacity: 1; transform: scaleY(1); background: #ff6a2b; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .boot-ticks i {
+          animation: none;
+          opacity: 0.4;
+        }
+      }
+    </style>
+    <script>
+      // Dark before first paint, so the window never flashes white on the way
+      // in. The full restore — interface scale — happens in
+      // `@sheet/shell/lib/theme` once React is running; this is only the part
+      // that has to be done before there is anything to see. Dark is the
+      // default, so only an explicit light, or a system pick on a light OS,
+      // turns it off — the same rule `theme.ts` applies.
+      var dark = true
+      try {
+        var stored = localStorage.getItem('sheet:theme')
+        if (stored === 'light') dark = false
+        else if (stored === 'system') dark = matchMedia('(prefers-color-scheme: dark)').matches
+      } catch (error) {}
+      document.documentElement.classList.toggle('dark', dark)
+      // The accent hue, for the same reason: no flash of orange before the pick.
+      try {
+        var accent = localStorage.getItem('sheet:accent')
+        if (['blue', 'violet', 'green', 'pink', 'teal'].indexOf(accent) > -1) {
+          document.documentElement.setAttribute('data-accent', accent)
+        }
+      } catch (error) {}
+    </script>
+  </head>
+  <body>
+    <div id="boot-splash" role="status" aria-label="Loading">
+      <div class="boot-loader">
+        <div class="boot-ticks" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <span>Loading</span>
+      </div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

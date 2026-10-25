@@ -1,0 +1,26 @@
+{
+  "steps": [
+    {
+      "step": "journey-new",
+      "url": "http://127.0.0.1:4184/app/new",
+      "text": "Dashboard\nFORMA\n\nWORKSPACE\n\nRecents\nFiles\nNew file\nSettings\nSource code · AGPL-3.0\nC\nCymbient Team\nNew file\n⌘N\nBrowse all files\n⌘F\nNo files yet"
+    },
+    {
+      "step": "journey-created",
+      "url": "http://127.0.0.1:4184/design/d9b11d760c1244b02897e4573d780ce7a",
+      "text": "Dashboard\nUntitled\nCopy\nExport\nFORMA\n\nWORKSPACE\n\nRecents\nFiles\nNew file\nSettings\nSource code · AGPL-3.0\nC\nCymbient Team\nUntitled\nPAGES\nPage 1\nLAYERS\n\nThis page is empty.\n\nAdd a frame\nComponents\n\nSelect an element to create a component.\n\nFonts\n\nNo fonts set yet. Pick one in Typography.\n\nDESIGN\nDelete selected element\nPAGE\n272727\nMCP\nConnect your agent"
+    },
+    {
+      "step": "journey-reloaded",
+      "url": "http://127.0.0.1:4184/design/d9b11d760c1244b02897e4573d780ce7a",
+      "text": "Dashboard\nUntitled\nCopy\nExport\nFORMA\n\nWORKSPACE\n\nRecents\nFiles\nNew file\nSettings\nSource code · AGPL-3.0\nC\nCymbient Team\nUntitled\nPAGES\nPage 1\nLAYERS\n\nThis page is empty.\n\nAdd a frame\nComponents\n\nSelect an element to create a component.\n\nFonts\n\nNo fonts set yet. Pick one in Typography.\n\nDESIGN\nDelete selected element\nPAGE\n272727\nMCP\nConnect your agent"
+    },
+    {
+      "step": "journey-reopen-list",
+      "url": "http://127.0.0.1:4184/app",
+      "text": "Dashboard\nUntitled\nFORMA\n\nWORKSPACE\n\nRecents\nFiles\nNew file\nSettings\nSource code · AGPL-3.0\nC\nCymbient Team\nRECENTS\n\n1 FILE\n\nLIGHT\nDARK\n\nEDITED JUST NOW\n\nUntitled\nEmpty design"
+    }
+  ],
+  "errors": [],
+  "currentUrl": "http://127.0.0.1:4184/app"
+}
