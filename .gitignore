@@ -28,3 +28,6 @@ apps/desktop/src-tauri/binaries/*
 # Cymbient Forma deployment runtime data and credentials
 /deploy/secrets/
 /deploy/data/
+
+# Private Forma SQLite backups
+backups/
